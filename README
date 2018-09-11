@@ -1,0 +1,6 @@
+Password Generator Toy
+======================
+
+Generates passwords that are estimated to have roughly 128bit of entropy.
+
+Use at your own risk.
