@@ -3,12 +3,14 @@ package main
 
 import "fmt"
 import "time"
+import "bytes"
 import "strings"
 import "crypto/rand"
 import "crypto/hmac"
 import "crypto/sha512"
 import "encoding/base64"
 import "encoding/binary"
+import "compress/gzip"
 
 func main () {
 
@@ -19,6 +21,16 @@ func main () {
 
   if n != len(raw_entropy) || err != nil {
     panic(err)
+  }
+
+  // verify the entropy is uncompressible
+  var b bytes.Buffer
+  gz := gzip.NewWriter(&b)
+  gz.Write(raw_entropy)
+  gz.Close()
+
+  if b.Len() < 4124 {
+    panic("received compressible entropy from operating system, aborting...")
   }
 
   salt := make([]byte, 8)
