@@ -56,12 +56,14 @@ func main () {
   base64_entropy = strings.Replace(base64_entropy, "8", "", -1)
   base64_entropy = strings.Replace(base64_entropy, "B", "", -1)
 
-  // no special chars, remove 3 chars from 64 total
+  // no special chars, remove 2 chars from 64 total
   base64_entropy = strings.Replace(base64_entropy, "+", "", -1)
   base64_entropy = strings.Replace(base64_entropy, "/", "", -1)
+
+  // remove padding
   base64_entropy = strings.Replace(base64_entropy, "=", "", -1)
 
-  // 128 / log2(64 - 10 - 3) = 22.5
+  // 128 / log2(64 - 10 - 2) = 22.45
   fmt.Println(base64_entropy[:24])
 
 }
