@@ -2,14 +2,12 @@
 package main
 
 import "fmt"
-import "time"
 import "bytes"
 import "strings"
 import "crypto/rand"
 import "crypto/hmac"
 import "crypto/sha512"
 import "encoding/base64"
-import "encoding/binary"
 import "compress/gzip"
 
 func main () {
@@ -33,9 +31,13 @@ func main () {
     panic("received compressible entropy from operating system, aborting...")
   }
 
-  salt := make([]byte, 8)
+  salt := make([]byte, 128)
 
-  binary.BigEndian.PutUint64(salt, uint64((time.Now().UnixNano())))
+  m, err := rand.Read(salt[:])
+
+  if m != len(salt) || err != nil {
+    panic(err)
+  }
 
   h := hmac.New(sha512.New, salt)
   h.Write(raw_entropy)
